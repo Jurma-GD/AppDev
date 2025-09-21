@@ -64,35 +64,113 @@ class TaskListPage extends StatelessWidget {
       context: context, 
       isScrollControlled: true, 
       builder: (_) { 
-        return Padding( 
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom), 
-          child: Padding( 
-            padding: const EdgeInsets.all(16), 
-            child: Column( 
-              mainAxisSize: MainAxisSize.min, 
-              children: [ 
-                Text('Add Task', style: Theme.of(context).textTheme.titleLarge), 
-                const SizedBox(height: 12), 
-                const TextField(decoration: InputDecoration(labelText: 'Title')), 
-                const SizedBox(height: 8), 
-                const TextField(maxLines: 2, decoration: InputDecoration(labelText: 
-'Description')), 
-                const SizedBox(height: 12), 
-                Row( 
-                  children: [ 
-                    Expanded(child: ElevatedButton(onPressed: () => 
-Navigator.pop(context), child: const Text('Create (UI only)'))), 
-                  ], 
-                ), 
-                const SizedBox(height: 8), 
-              ], 
-            ), 
-          ), 
-        ); 
+        return const AddTaskModal();
       }, 
     ); 
   } 
 } 
+ 
+class AddTaskModal extends StatefulWidget {
+  const AddTaskModal({super.key});
+
+  @override
+  State<AddTaskModal> createState() => _AddTaskModalState();
+}
+
+class _AddTaskModalState extends State<AddTaskModal> {
+  String selectedPriority = 'High';
+  final _titleController = TextEditingController(text: 'Weekly sync notes');
+  final _descController = TextEditingController(text: 'Discuss project status, blockers, and next steps.');
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 24,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Add Task',
+            style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 18),
+          TextField(
+            controller: _titleController,
+            decoration: const InputDecoration(labelText: 'Title'),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _descController,
+            maxLines: 2,
+            decoration: const InputDecoration(labelText: 'Description'),
+          ),
+          const SizedBox(height: 18),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: theme.colorScheme.outline.withOpacity(0.3)),
+            ),
+            child: DropdownButton<String>(
+              value: selectedPriority,
+              isExpanded: true,
+              underline: const SizedBox(),
+              items: ['High', 'Medium', 'Low']
+                  .map((p) => DropdownMenuItem(
+                        value: p,
+                        child: Text(
+                          p,
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ))
+                  .toList(),
+              onChanged: (v) => setState(() => selectedPriority = v!),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('(UI-only) Task created')),
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Create (UI only)'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+}
  
 /// --------------------------- 
 /// Widget: TaskCard (Stateless) 
