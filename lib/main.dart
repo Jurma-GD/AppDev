@@ -102,12 +102,16 @@ class TaskCard extends StatelessWidget {
   final String title; 
   final String description; 
   final String priority; 
- 
+  final String? dueDate; // new 
+  final String? assignee; // new 
+
   const TaskCard({ 
     super.key, 
     required this.title, 
     required this.description, 
     required this.priority, 
+    this.dueDate, 
+    this.assignee,
   }); 
  
   @override 
@@ -125,7 +129,7 @@ class TaskCard extends StatelessWidget {
                     Expanded(child: Text(title, style: 
 Theme.of(context).textTheme.titleMedium)), 
                     // small hint to show composition: IconLabel can be reused elsewhere 
-                    IconLabel(icon: Icons.calendar_month, label: 'Oct 10'), 
+                    IconLabel(icon: Icons.calendar_month, label: dueDate ?? 'No due date'), 
                   ], 
                 ), 
                 const SizedBox(height: 6), 
@@ -134,7 +138,9 @@ Theme.of(context).textTheme.titleMedium)),
                 Row(children: [ 
                   IconLabel(icon: Icons.comment, label: '2 comments'), 
                   const SizedBox(width: 12), 
-                  IconLabel(icon: Icons.done, label: '2 works done'), 
+                  IconLabel(icon: Icons.done, label: '2 works done'),
+                  const SizedBox(width: 12), 
+                  IconLabel(icon: Icons.person_outline, label: assignee ?? 'Unassigned'), 
                 ]), 
               ]), 
             ), 
