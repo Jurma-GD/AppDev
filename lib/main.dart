@@ -125,7 +125,7 @@ class TaskCard extends StatelessWidget {
                     Expanded(child: Text(title, style: 
 Theme.of(context).textTheme.titleMedium)), 
                     // small hint to show composition: IconLabel can be reused elsewhere 
-                    IconLabel(icon: Icons.calendar_today_rounded, label: 'Today'), 
+                    IconLabel(icon: Icons.calendar_month, label: 'Oct 10'), 
                   ], 
                 ), 
                 const SizedBox(height: 6), 
@@ -134,7 +134,7 @@ Theme.of(context).textTheme.titleMedium)),
                 Row(children: [ 
                   IconLabel(icon: Icons.comment, label: '2 comments'), 
                   const SizedBox(width: 12), 
-                  IconLabel(icon: Icons.check_circle_outline, label: '0 done'), 
+                  IconLabel(icon: Icons.done, label: '2 works done'), 
                 ]), 
               ]), 
             ), 
